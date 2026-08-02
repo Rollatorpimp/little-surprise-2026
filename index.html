@@ -506,8 +506,8 @@
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/sunburn.jpg" alt="Strandtag" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
-          <figcaption>สนุกมาก 🚤</figcaption>
+          <img src="images/first.jpg" alt="Strandtag" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+          <figcaption>เดทแรก 🤩</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
@@ -528,14 +528,6 @@
     </div>
 
     <div class="section">
-      <h2>Ein kleines Extra für dich 🎁</h2>
-      <p class="subtitle">Klick auf das Geschenk...</p>
-      <button class="gift-btn" onclick="openVoucher()" aria-label="Geschenk öffnen">
-        <img src="images/gift.png" alt="Geschenk">
-      </button>
-    </div>
-
-    <div class="section">
       <h2>ช่วงเวลาที่น่ารัก (และตลก) 💕</h2>
       <div class="carousel-wrap">
         <button class="carousel-btn" onclick="scrollCarousel(-1)" aria-label="Zurück">‹</button>
@@ -552,8 +544,8 @@
           </figure>
           <figure class="carousel-slide">
             <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-            <img src="images/moment3.jpg" alt="Lovely moment 3" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
-            <figcaption>💛</figcaption>
+            <img src="images/sunburn.jpg" alt="Lovely moment 3" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>☀️🥵</figcaption>
           </figure>
           <figure class="carousel-slide">
             <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
@@ -573,6 +565,14 @@
         </div>
         <button class="carousel-btn" onclick="scrollCarousel(1)" aria-label="Weiter">›</button>
       </div>
+    </div>
+
+    <div class="section">
+      <h2>ของขวัญพิเศษเล็กๆ น้อยๆ สำหรับคุณ 🎁</h2>
+      <p class="subtitle">คลิกบนของขวัญ...</p>
+      <button class="gift-btn" onclick="openVoucher()" aria-label="เปิดของขวัญ">
+        <img src="images/gift.png" alt="ของขวัญ">
+      </button>
     </div>
 
     <div class="section">
@@ -598,21 +598,21 @@
   <div id="voucherModal" class="modal-overlay" onclick="if (event.target === this) closeVoucher();">
     <div class="voucher-card">
       <button class="voucher-close" onclick="closeVoucher()" aria-label="Schließen">✕</button>
-      <div class="voucher-ribbon">🎁 Gutschein</div>
-      <h3 class="voucher-title">[Titel des Gutscheins]</h3>
-      <p class="voucher-desc">[Beschreibung: wofür ist dieser Gutschein einlösbar? z.B. "1x gemeinsames Candle-Light-Dinner"]</p>
+      <div class="voucher-ribbon">🎁 Voucher</div>
+      <h3 class="voucher-title">ของขวัญพิเศษสำหรับแฟนสาวสุดที่รักของฉัน</h3>
+      <p class="voucher-desc">ของขวัญพิเศษสำหรับที่รักของฉัน</p>
       <div class="voucher-divider"></div>
       <div class="voucher-footer">
         <div>
-          <span class="voucher-label">Gültig bis</span>
-          <span class="voucher-value">[Datum]</span>
+          <span class="voucher-label">ใช้ได้ถึงวันที่</span>
+          <span class="voucher-value">♾️</span>
         </div>
         <div>
-          <span class="voucher-label">Code</span>
-          <span class="voucher-value">[CODE]</span>
+          <span class="voucher-label">รหัส</span>
+          <span class="voucher-value">LOVE-100%!</span>
         </div>
       </div>
-      <p class="voucher-signature">Mit Liebe, [Dein Name] 💛</p>
+      <p class="voucher-signature">ด้วยรักจากตุ๊กตาหมีของคุณ 🧸</p>
     </div>
   </div>
 
