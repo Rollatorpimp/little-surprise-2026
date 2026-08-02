@@ -705,10 +705,6 @@
       }
     });
 
-    if (localStorage.getItem("pw_verified") === "true") {
-      showMain();
-    }
-
     setInterval(tick, 1000);
     tick();
 
@@ -793,6 +789,10 @@
         document.body.appendChild(span);
         setTimeout(() => span.remove(), 4000);
       }
+    }
+
+    if (localStorage.getItem("pw_verified") === "true") {
+      showMain();
     }
   </script>
 
