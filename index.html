@@ -226,6 +226,89 @@
     text-align: center;
   }
 
+  .clickable-photo {
+    cursor: pointer;
+  }
+
+  /* Lightbox */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: zoom-out;
+  }
+  #lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Carousel */
+  .carousel-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .carousel {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .carousel::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-slide {
+    flex: 0 0 70%;
+    max-width: 300px;
+    scroll-snap-align: center;
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+  .carousel-slide .photo-placeholder,
+  .carousel-slide img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+  }
+  .carousel-slide img {
+    display: none;
+    object-fit: cover;
+  }
+  .carousel-slide figcaption {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+  }
+  .carousel-btn {
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.2s ease;
+  }
+  .carousel-btn:hover {
+    background: #fff;
+  }
+
   /* Love note */
   .love-note {
     background: rgba(255,255,255,0.75);
@@ -303,34 +386,74 @@
       <div class="gallery">
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/hands.jpg" alt="Unsere erste Reise" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/hands.jpg" alt="Unsere erste Reise" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>ฉันคิดถึงช่วงเวลาแบบนี้จัง... 🌏</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/hands2.jpg" alt="Bangkok Nights" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/hands2.jpg" alt="Bangkok Nights" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>Bana Nights 🌃</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto3.jpg" alt="Strandtag" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/foto3.jpg" alt="Strandtag" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>Strandtag 🏖️</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto4.jpg" alt="Zusammen unterwegs" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/foto4.jpg" alt="Zusammen unterwegs" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>Zusammen unterwegs 🚗</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto5.jpg" alt="Lieblingsmoment" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/foto5.jpg" alt="Lieblingsmoment" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>Lieblingsmoment 💛</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto6.jpg" alt="Mehr davon 2026" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <img src="images/foto6.jpg" alt="Mehr davon 2026" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
           <figcaption>Mehr davon 2026 🥂</figcaption>
         </figure>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Lovely Moments 💕</h2>
+      <div class="carousel-wrap">
+        <button class="carousel-btn" onclick="scrollCarousel(-1)" aria-label="Zurück">‹</button>
+        <div class="carousel" id="carousel">
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment1.jpg" alt="Lovely moment 1" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment2.jpg" alt="Lovely moment 2" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment3.jpg" alt="Lovely moment 3" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment4.jpg" alt="Lovely moment 4" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment5.jpg" alt="Lovely moment 5" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+          <figure class="carousel-slide">
+            <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+            <img src="images/moment6.jpg" alt="Lovely moment 6" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
+            <figcaption>💛</figcaption>
+          </figure>
+        </div>
+        <button class="carousel-btn" onclick="scrollCarousel(1)" aria-label="Weiter">›</button>
       </div>
     </div>
 
@@ -348,6 +471,10 @@
       <p class="subtitle">13.11.2026, 18:05 Uhr (Thailand-Time) 🇹🇭</p>
     </div>
 
+  </div>
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightboxImg" src="" alt="">
   </div>
 
   <script>
@@ -443,6 +570,26 @@
 
     setInterval(tick, 1000);
     tick();
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.style.display = "flex";
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+      lightboxImg.src = "";
+    }
+
+    function scrollCarousel(dir) {
+      const carousel = document.getElementById("carousel");
+      const slide = carousel.querySelector(".carousel-slide");
+      const gap = 16;
+      carousel.scrollBy({ left: (slide.offsetWidth + gap) * dir, behavior: "smooth" });
+    }
 
     let audioCtx;
     function playPartyHorn() {
