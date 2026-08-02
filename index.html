@@ -82,6 +82,60 @@
     color: #6f89b8;
   }
 
+  /* ---------- Password Gate ---------- */
+  #passwordGate {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%);
+  }
+  .gate-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  .gate-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  #pwForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+  }
+  #pwForm input {
+    padding: 0.7rem 1rem;
+    border-radius: 999px;
+    border: 2px solid #ffb6c8;
+    font-size: 1rem;
+    text-align: center;
+    outline: none;
+  }
+  #pwForm input:focus {
+    border-color: #ff6f91;
+  }
+  #pwError {
+    display: none;
+    color: #d1305a;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+  .shake { animation: shake 0.4s ease; }
+
   /* ---------- Main Site ---------- */
   #mainSite {
     display: none;
@@ -219,6 +273,19 @@
     <div class="lock-footer">Freischaltung: 15.08.2026, 00:00 Uhr (Thailand-Zeit) 🇹🇭</div>
   </div>
 
+  <div id="passwordGate">
+    <div class="gate-card">
+      <div class="gate-icon">🔐</div>
+      <h2>Fast geschafft!</h2>
+      <p class="subtitle">Gib das Passwort ein, um die Überraschung zu sehen 💛</p>
+      <form id="pwForm">
+        <input type="password" id="pwInput" placeholder="Passwort" autocomplete="off" required>
+        <button type="submit" class="btn">Freischalten</button>
+      </form>
+      <p id="pwError">Falsches Passwort 😅 Versuch's nochmal</p>
+    </div>
+  </div>
+
   <div id="mainSite">
 
     <div class="section">
@@ -285,13 +352,21 @@
   <script>
     const unlockTime = new Date("2026-08-15T00:00:00+07:00").getTime();
     const flightTime = new Date("2026-11-13T18:05:00+07:00").getTime();
+    const SITE_PASSWORD = "iLoveYouMyTeebooboo";
+    const SKIP_PHRASE = "override";
 
     const lockScreen = document.getElementById("lockScreen");
+    const passwordGate = document.getElementById("passwordGate");
     const mainSite = document.getElementById("mainSite");
     const lockCountdownEl = document.getElementById("lockCountdown");
     const flightCountdownEl = document.getElementById("flightCountdown");
+    const pwForm = document.getElementById("pwForm");
+    const pwInput = document.getElementById("pwInput");
+    const pwError = document.getElementById("pwError");
 
-    let unlocked = false;
+    let phase = "locked";
+    let skipTriggered = false;
+    let keyBuffer = "";
 
     function formatDiff(diff) {
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -301,24 +376,36 @@
       return `${days}T ${hours}h ${minutes}m ${seconds}s`;
     }
 
+    function showGate() {
+      phase = "gate";
+      lockScreen.style.opacity = "0";
+      setTimeout(() => {
+        lockScreen.style.display = "none";
+        passwordGate.style.display = "flex";
+        pwInput.focus();
+      }, 800);
+    }
+
+    function showMain() {
+      phase = "main";
+      lockScreen.style.display = "none";
+      passwordGate.style.display = "none";
+      mainSite.style.display = "block";
+      celebrate();
+    }
+
     function tick() {
       const now = Date.now();
 
-      if (!unlocked && now >= unlockTime) {
-        unlocked = true;
-        lockScreen.style.opacity = "0";
-        setTimeout(() => {
-          lockScreen.style.display = "none";
-          mainSite.style.display = "block";
-          celebrate();
-        }, 800);
+      if (phase === "locked" && (now >= unlockTime || skipTriggered)) {
+        showGate();
       }
 
-      if (!unlocked) {
-        lockCountdownEl.textContent = formatDiff(unlockTime - now);
+      if (phase === "locked") {
+        lockCountdownEl.textContent = formatDiff(Math.max(unlockTime - now, 0));
       }
 
-      if (unlocked) {
+      if (phase === "main") {
         const flightDiff = flightTime - now;
         flightCountdownEl.textContent = flightDiff > 0
           ? formatDiff(flightDiff)
@@ -326,10 +413,31 @@
       }
     }
 
-    if (Date.now() >= unlockTime) {
-      unlocked = true;
-      lockScreen.style.display = "none";
-      mainSite.style.display = "block";
+    // Geheimer Skip: "override" während des Lock-Screens tippen, um zur Passwortabfrage zu springen (zum Testen).
+    window.addEventListener("keydown", (e) => {
+      if (phase !== "locked" || e.key.length !== 1) return;
+      keyBuffer = (keyBuffer + e.key.toLowerCase()).slice(-SKIP_PHRASE.length);
+      if (keyBuffer === SKIP_PHRASE) {
+        skipTriggered = true;
+      }
+    });
+
+    pwForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (pwInput.value === SITE_PASSWORD) {
+        localStorage.setItem("pw_verified", "true");
+        showMain();
+      } else {
+        pwError.style.display = "block";
+        pwInput.value = "";
+        pwForm.classList.remove("shake");
+        void pwForm.offsetWidth;
+        pwForm.classList.add("shake");
+      }
+    });
+
+    if (localStorage.getItem("pw_verified") === "true") {
+      showMain();
     }
 
     setInterval(tick, 1000);
