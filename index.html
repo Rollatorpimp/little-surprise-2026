@@ -249,6 +249,116 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   }
 
+  /* Gift button */
+  .gift-btn {
+    border: none;
+    background: white;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    padding: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    animation: giftPulse 2.2s ease-in-out infinite;
+    transition: transform 0.2s ease;
+  }
+  .gift-btn:hover {
+    transform: scale(1.08);
+  }
+  .gift-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  @keyframes giftPulse {
+    0%, 100% { box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    50% { box-shadow: 0 6px 30px rgba(255,111,145,0.55); }
+  }
+
+  /* Voucher popup */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.6);
+  }
+  .voucher-card {
+    position: relative;
+    background: #fffaf3;
+    border: 2px dashed #ff9fb2;
+    border-radius: 20px;
+    max-width: 380px;
+    width: 100%;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  }
+  .voucher-close {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.8rem;
+    border: none;
+    background: transparent;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #a3617a;
+  }
+  .voucher-ribbon {
+    display: inline-block;
+    background: #ff6f91;
+    color: white;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  .voucher-title {
+    font-size: 1.4rem;
+    color: #4a2c40;
+    margin-bottom: 0.75rem;
+  }
+  .voucher-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #6b4a5c;
+    margin-bottom: 1.5rem;
+    white-space: pre-line;
+  }
+  .voucher-divider {
+    border-top: 2px dashed #ffd3de;
+    margin: 1.25rem 0;
+  }
+  .voucher-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    text-align: left;
+  }
+  .voucher-label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #a3617a;
+  }
+  .voucher-value {
+    display: block;
+    font-weight: 700;
+    color: #4a2c40;
+  }
+  .voucher-signature {
+    font-style: italic;
+    color: #6b4a5c;
+  }
+
   /* Carousel */
   .carousel-wrap {
     display: flex;
@@ -412,9 +522,17 @@
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
           <img src="images/family.jpg" alt="Mehr davon 2026" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
-          <figcaption>จะมีเรื่องราวแบบนี้เพิ่มเติมในปี 2027 🥂</figcaption>
+          <figcaption>ปลื้มอีกแล้ว! 🥂</figcaption>
         </figure>
       </div>
+    </div>
+
+    <div class="section">
+      <h2>Ein kleines Extra für dich 🎁</h2>
+      <p class="subtitle">Klick auf das Geschenk...</p>
+      <button class="gift-btn" onclick="openVoucher()" aria-label="Geschenk öffnen">
+        <img src="images/gift.png" alt="Geschenk">
+      </button>
     </div>
 
     <div class="section">
@@ -425,12 +543,12 @@
           <figure class="carousel-slide">
             <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
             <img src="images/funny.jpg" alt="Lovely moment 1" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
-            <figcaption>💛</figcaption>
+            <figcaption>🤣</figcaption>
           </figure>
           <figure class="carousel-slide">
             <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
             <img src="images/kiss.jpg" alt="Lovely moment 2" class="clickable-photo" onload="this.previousElementSibling.style.display='none'; this.style.display='block';" onclick="openLightbox(this.src)">
-            <figcaption>💛</figcaption>
+            <figcaption>💋</figcaption>
           </figure>
           <figure class="carousel-slide">
             <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
@@ -475,6 +593,27 @@
 
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <div id="voucherModal" class="modal-overlay" onclick="if (event.target === this) closeVoucher();">
+    <div class="voucher-card">
+      <button class="voucher-close" onclick="closeVoucher()" aria-label="Schließen">✕</button>
+      <div class="voucher-ribbon">🎁 Gutschein</div>
+      <h3 class="voucher-title">[Titel des Gutscheins]</h3>
+      <p class="voucher-desc">[Beschreibung: wofür ist dieser Gutschein einlösbar? z.B. "1x gemeinsames Candle-Light-Dinner"]</p>
+      <div class="voucher-divider"></div>
+      <div class="voucher-footer">
+        <div>
+          <span class="voucher-label">Gültig bis</span>
+          <span class="voucher-value">[Datum]</span>
+        </div>
+        <div>
+          <span class="voucher-label">Code</span>
+          <span class="voucher-value">[CODE]</span>
+        </div>
+      </div>
+      <p class="voucher-signature">Mit Liebe, [Dein Name] 💛</p>
+    </div>
   </div>
 
   <script>
@@ -583,6 +722,22 @@
       lightbox.style.display = "none";
       lightboxImg.src = "";
     }
+
+    const voucherModal = document.getElementById("voucherModal");
+
+    function openVoucher() {
+      voucherModal.style.display = "flex";
+    }
+
+    function closeVoucher() {
+      voucherModal.style.display = "none";
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      closeLightbox();
+      closeVoucher();
+    });
 
     function scrollCarousel(dir) {
       const carousel = document.getElementById("carousel");
