@@ -597,7 +597,7 @@
 
   <div id="voucherModal" class="modal-overlay" onclick="if (event.target === this) closeVoucher();">
     <div class="voucher-card">
-      <button class="voucher-close" onclick="closeVoucher()" aria-label="Schließen">✕</button>
+      <button class="voucher-close" onclick="closeVoucher()" aria-label="ปิด">✕</button>
       <div class="voucher-ribbon">🎁 Voucher</div>
       <h3 class="voucher-title">ของขวัญพิเศษสำหรับแฟนสาวสุดที่รักของฉัน</h3>
       <p class="voucher-desc">ของขวัญพิเศษสำหรับที่รักของฉัน</p>
@@ -615,6 +615,8 @@
       <p class="voucher-signature">ด้วยรักจากตุ๊กตาหมีของคุณ 🧸</p>
     </div>
   </div>
+
+  <div id="hiddenYouTubeAudio" style="position:fixed; width:1px; height:1px; overflow:hidden; opacity:0; pointer-events:none; left:-9999px; top:-9999px;" aria-hidden="true"></div>
 
   <script>
     const unlockTime = new Date("2026-08-15T00:00:00+07:00").getTime();
@@ -724,9 +726,25 @@
     }
 
     const voucherModal = document.getElementById("voucherModal");
+    const YT_VIDEO_ID = "EEjHpLSQwB8";
+    let musicStarted = false;
+
+    function startBackgroundMusic() {
+      if (musicStarted) return;
+      musicStarted = true;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube.com/embed/${YT_VIDEO_ID}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1`;
+      iframe.allow = "autoplay; encrypted-media";
+      iframe.width = "1";
+      iframe.height = "1";
+      iframe.style.border = "none";
+      iframe.title = "Musik";
+      document.getElementById("hiddenYouTubeAudio").appendChild(iframe);
+    }
 
     function openVoucher() {
       voucherModal.style.display = "flex";
+      startBackgroundMusic();
     }
 
     function closeVoucher() {
