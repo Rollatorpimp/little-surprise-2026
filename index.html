@@ -768,17 +768,15 @@
       "audio/horn5.mp3"
     ];
 
-    function playHornSequence(index = 0) {
-      if (index >= HORN_FILES.length) return;
-      const audio = new Audio(HORN_FILES[index]);
-      const playNext = () => playHornSequence(index + 1);
-      audio.addEventListener("ended", playNext);
-      audio.addEventListener("error", playNext);
-      audio.play().catch(playNext);
+    let hornIndex = 0;
+    function playNextHorn() {
+      const audio = new Audio(HORN_FILES[hornIndex]);
+      audio.play().catch(() => {});
+      hornIndex = (hornIndex + 1) % HORN_FILES.length;
     }
 
     function celebrate() {
-      playHornSequence();
+      playNextHorn();
       const emojis = ["🎉", "🎈", "🎁", "🥳", "✨", "💛"];
       for (let i = 0; i < 30; i++) {
         const span = document.createElement("span");
