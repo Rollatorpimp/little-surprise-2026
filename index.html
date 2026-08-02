@@ -738,9 +738,27 @@
       document.getElementById("hiddenYouTubeAudio").appendChild(iframe);
     }
 
+    let rainStarted = false;
+    function startEmojiRain() {
+      if (rainStarted) return;
+      rainStarted = true;
+      const emojis = ["🎉", "💛", "❤️", "🎊", "💕", "✨"];
+      const rainInterval = setInterval(() => {
+        const span = document.createElement("span");
+        span.className = "confetti";
+        span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.animationDuration = 2 + Math.random() * 2 + "s";
+        document.body.appendChild(span);
+        setTimeout(() => span.remove(), 4000);
+      }, 200);
+      setTimeout(() => clearInterval(rainInterval), 60000);
+    }
+
     function openVoucher() {
       voucherModal.style.display = "flex";
       startBackgroundMusic();
+      startEmojiRain();
     }
 
     function closeVoucher() {
