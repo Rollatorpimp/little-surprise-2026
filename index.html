@@ -678,7 +678,7 @@
         const flightDiff = flightTime - now;
         flightCountdownEl.textContent = flightDiff > 0
           ? formatDiff(flightDiff)
-          : "🛬 Gelandet – ich bin bei dir!";
+          : "🛬 ฉันลงจอดแล้ว – ฉันมาหาคุณแล้ว!";
       }
     }
 
@@ -764,29 +764,25 @@
       carousel.scrollBy({ left: (slide.offsetWidth + gap) * dir, behavior: "smooth" });
     }
 
-    let audioCtx;
-    function playPartyHorn() {
-      try {
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(230, now);
-        osc.frequency.linearRampToValueAtTime(320, now + 0.12);
-        osc.frequency.linearRampToValueAtTime(180, now + 0.55);
-        gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.25, now + 0.04);
-        gain.gain.linearRampToValueAtTime(0.2, now + 0.4);
-        gain.gain.linearRampToValueAtTime(0, now + 0.6);
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start(now);
-        osc.stop(now + 0.6);
-      } catch (e) {}
+    const HORN_FILES = [
+      "audio/horn1.mp3",
+      "audio/horn2.mp3",
+      "audio/horn3.mp3",
+      "audio/horn4.mp3",
+      "audio/horn5.mp3"
+    ];
+
+    function playHornSequence(index = 0) {
+      if (index >= HORN_FILES.length) return;
+      const audio = new Audio(HORN_FILES[index]);
+      const playNext = () => playHornSequence(index + 1);
+      audio.addEventListener("ended", playNext);
+      audio.addEventListener("error", playNext);
+      audio.play().catch(playNext);
     }
 
     function celebrate() {
-      playPartyHorn();
+      playHornSequence();
       const emojis = ["🎉", "🎈", "🎁", "🥳", "✨", "💛"];
       for (let i = 0; i < 30; i++) {
         const span = document.createElement("span");
