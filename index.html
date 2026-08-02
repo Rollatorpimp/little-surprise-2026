@@ -9,7 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
 
   :root {
     --pink: #ff5d8f;
@@ -337,11 +342,15 @@
 
   .clickable-photo {
     cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .clickable-photo:active {
+    transform: scale(0.92);
   }
 
   /* Lightbox */
   #lightbox {
-    display: none;
+    display: flex;
     position: fixed;
     inset: 0;
     z-index: 30;
@@ -350,6 +359,14 @@
     padding: 1.5rem;
     background: rgba(20, 8, 20, 0.92);
     cursor: zoom-out;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+  #lightbox.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease;
   }
   #lightbox img {
     max-width: 100%;
@@ -357,6 +374,11 @@
     border-radius: 12px;
     border: 6px solid white;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  #lightbox.open img {
+    transform: scale(1);
   }
 
   /* Gift button */
@@ -375,6 +397,10 @@
   .gift-btn:hover {
     transform: translate(-2px, -2px) rotate(-8deg);
     box-shadow: 7px 7px 0 var(--ink);
+  }
+  .gift-btn:active {
+    transform: scale(0.88);
+    box-shadow: 2px 2px 0 var(--ink);
   }
   .gift-btn img {
     width: 100%;
@@ -426,17 +452,21 @@
   }
   .voucher-close {
     position: absolute;
-    top: 0.7rem;
-    right: 0.9rem;
+    top: 0.6rem;
+    right: 0.7rem;
     border: none;
     background: var(--cream);
-    width: 2rem;
-    height: 2rem;
+    width: 2.6rem;
+    height: 2.6rem;
     border-radius: 50%;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1;
     cursor: pointer;
     color: var(--ink-soft);
+    transition: transform 0.15s ease;
+  }
+  .voucher-close:active {
+    transform: scale(0.88);
   }
   .voucher-ribbon {
     display: inline-block;
@@ -913,12 +943,12 @@
 
     function openLightbox(src) {
       lightboxImg.src = src;
-      lightbox.style.display = "flex";
+      lightbox.classList.add("open");
     }
 
     function closeLightbox() {
-      lightbox.style.display = "none";
-      lightboxImg.src = "";
+      lightbox.classList.remove("open");
+      setTimeout(() => { lightboxImg.src = ""; }, 250);
     }
 
     const voucherModal = document.getElementById("voucherModal");
