@@ -295,7 +295,7 @@
 
         ของขวัญดิจิทัลเล็กๆ น้อยๆ ที่รวบรวมช่วงเวลาที่สวยงามที่สุดของเราไว้ 💛
       </p>
-      <button class="btn" onclick="celebrate()">Nochmal feiern 🎉</button>
+      <button class="btn" onclick="celebrate()">กดเพื่อเริ่มปาร์ตี้อีกครั้ง! 🎉</button>
     </div>
 
     <div class="section">
@@ -303,13 +303,13 @@
       <div class="gallery">
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto1.jpg" alt="Unsere erste Reise" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
-          <figcaption>Unsere erste Reise 🌏</figcaption>
+          <img src="images/hands.jpg" alt="Unsere erste Reise" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>ฉันคิดถึงช่วงเวลาแบบนี้จัง... 🌏</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
-          <img src="images/foto2.jpg" alt="Bangkok Nights" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
-          <figcaption>Bangkok Nights 🌃</figcaption>
+          <img src="images/hands2.jpg" alt="Bangkok Nights" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Bana Nights 🌃</figcaption>
         </figure>
         <figure class="photo-card">
           <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
@@ -444,7 +444,29 @@
     setInterval(tick, 1000);
     tick();
 
+    let audioCtx;
+    function playPartyHorn() {
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(230, now);
+        osc.frequency.linearRampToValueAtTime(320, now + 0.12);
+        osc.frequency.linearRampToValueAtTime(180, now + 0.55);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.25, now + 0.04);
+        gain.gain.linearRampToValueAtTime(0.2, now + 0.4);
+        gain.gain.linearRampToValueAtTime(0, now + 0.6);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      } catch (e) {}
+    }
+
     function celebrate() {
+      playPartyHorn();
       const emojis = ["🎉", "🎈", "🎁", "🥳", "✨", "💛"];
       for (let i = 0; i < 30; i++) {
         const span = document.createElement("span");
