@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Für Punthipa 💛</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color: #4a2c40;
+  }
+
+  /* ---------- Lock Screen ---------- */
+  #lockScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: radial-gradient(circle at center, #1b1030 0%, #0a0614 100%);
+    color: #cfe9ff;
+    transition: opacity 0.8s ease;
+  }
+
+  .lock-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .glitch {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(1.3rem, 5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #eafcff;
+    text-shadow: 2px 0 #ff2bd6, -2px 0 #00fff2;
+    animation: flicker 3s infinite;
+    margin-bottom: 0.8rem;
+  }
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 24%, 55% { opacity: 0.45; }
+  }
+
+  .cryptic {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    color: #8fb8ff;
+    margin-bottom: 2rem;
+  }
+  .cryptic::after {
+    content: "_";
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  #lockCountdown {
+    font-family: 'Courier New', monospace;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(140, 200, 255, 0.4);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .lock-footer {
+    font-size: 0.85rem;
+    color: #6f89b8;
+  }
+
+  /* ---------- Main Site ---------- */
+  #mainSite {
+    display: none;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #fbc2eb 100%);
+    min-height: 100vh;
+  }
+
+  .section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 4vw, 1.8rem);
+    margin-bottom: 1.5rem;
+  }
+
+  p.subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+  }
+
+  .btn {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 999px;
+    background: #ff6f91;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .btn:hover {
+    background: #ff4d78;
+    transform: scale(1.05);
+  }
+
+  /* Gallery */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .photo-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  }
+  .photo-placeholder {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #ffd3e0, #c2e9fb);
+    font-size: 2rem;
+  }
+  .photo-placeholder span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #7a5468;
+    padding: 0 0.5rem;
+    text-align: center;
+  }
+  .photo-card img {
+    display: none;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .photo-card figcaption {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  /* Love note */
+  .love-note {
+    background: rgba(255,255,255,0.75);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 550px;
+    margin: 0 auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    line-height: 1.8;
+    font-size: 1.05rem;
+  }
+
+  /* Flight countdown */
+  #flightCountdown {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: bold;
+    background: rgba(255,255,255,0.6);
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    display: inline-block;
+  }
+
+  .confetti {
+    position: fixed;
+    top: -10px;
+    font-size: 1.5rem;
+    animation: fall linear forwards;
+    pointer-events: none;
+    z-index: 20;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0.8; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="lockScreen">
+    <div class="lock-icon">🔒</div>
+    <div class="glitch" data-text="ZUGRIFF GESPERRT">ZUGRIFF GESPERRT</div>
+    <div class="cryptic">Waiting for countdown</div>
+    <div id="lockCountdown">Lädt...</div>
+    <div class="lock-footer">Freischaltung: 15.08.2026, 00:00 Uhr (Thailand-Zeit) 🇹🇭</div>
+  </div>
+
+  <div id="mainSite">
+
+    <div class="section">
+      <h1>🎂 Alles Gute zum 33. Geburtstag, Punthipa! 🎂</h1>
+      <p class="subtitle">
+        Auch aus der Ferne bist du jeden Tag in meinen Gedanken. Hier ist ein
+        kleines digitales Geschenk mit ein paar unserer schönsten Momente. 💛
+      </p>
+      <button class="btn" onclick="celebrate()">Nochmal feiern 🎉</button>
+    </div>
+
+    <div class="section">
+      <h2>Unsere Reisen zusammen ✈️</h2>
+      <div class="gallery">
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto1.jpg" alt="Unsere erste Reise" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Unsere erste Reise 🌏</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto2.jpg" alt="Bangkok Nights" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Bangkok Nights 🌃</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto3.jpg" alt="Strandtag" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Strandtag 🏖️</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto4.jpg" alt="Zusammen unterwegs" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Zusammen unterwegs 🚗</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto5.jpg" alt="Lieblingsmoment" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Lieblingsmoment 💛</figcaption>
+        </figure>
+        <figure class="photo-card">
+          <div class="photo-placeholder">📷<span>Foto folgt...</span></div>
+          <img src="images/foto6.jpg" alt="Mehr davon 2026" onload="this.previousElementSibling.style.display='none'; this.style.display='block';">
+          <figcaption>Mehr davon 2026 🥂</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="love-note">
+        Alles Liebe zu deinem Geburtstag! Ich bin so dankbar für jeden Moment
+        mit dir und kann es kaum erwarten, wieder bei dir zu sein. Bis dahin
+        trag ich dich in Gedanken bei mir. 💛
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Bis ich wieder bei dir lande 🛬</h2>
+      <div id="flightCountdown">Lädt...</div>
+      <p class="subtitle">13.11.2026, 18:05 Uhr (Thailand-Zeit) 🇹🇭</p>
+    </div>
+
+  </div>
+
+  <script>
+    const unlockTime = new Date("2026-08-15T00:00:00+07:00").getTime();
+    const flightTime = new Date("2026-11-13T18:05:00+07:00").getTime();
+
+    const lockScreen = document.getElementById("lockScreen");
+    const mainSite = document.getElementById("mainSite");
+    const lockCountdownEl = document.getElementById("lockCountdown");
+    const flightCountdownEl = document.getElementById("flightCountdown");
+
+    let unlocked = false;
+
+    function formatDiff(diff) {
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      return `${days}T ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    function tick() {
+      const now = Date.now();
+
+      if (!unlocked && now >= unlockTime) {
+        unlocked = true;
+        lockScreen.style.opacity = "0";
+        setTimeout(() => {
+          lockScreen.style.display = "none";
+          mainSite.style.display = "block";
+          celebrate();
+        }, 800);
+      }
+
+      if (!unlocked) {
+        lockCountdownEl.textContent = formatDiff(unlockTime - now);
+      }
+
+      if (unlocked) {
+        const flightDiff = flightTime - now;
+        flightCountdownEl.textContent = flightDiff > 0
+          ? formatDiff(flightDiff)
+          : "🛬 Gelandet – ich bin bei dir!";
+      }
+    }
+
+    if (Date.now() >= unlockTime) {
+      unlocked = true;
+      lockScreen.style.display = "none";
+      mainSite.style.display = "block";
+    }
+
+    setInterval(tick, 1000);
+    tick();
+
+    function celebrate() {
+      const emojis = ["🎉", "🎈", "🎁", "🥳", "✨", "💛"];
+      for (let i = 0; i < 30; i++) {
+        const span = document.createElement("span");
+        span.className = "confetti";
+        span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        span.style.left = Math.random() * 100 + "vw";
+        span.style.animationDuration = 2 + Math.random() * 2 + "s";
+        document.body.appendChild(span);
+        setTimeout(() => span.remove(), 4000);
+      }
+    }
+  </script>
+
+</body>
+</html>
