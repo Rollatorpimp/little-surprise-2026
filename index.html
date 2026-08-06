@@ -412,6 +412,86 @@
     50% { transform: rotate(4deg); }
   }
 
+  /* Quiz */
+  .quiz-card {
+    position: relative;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 24px;
+    max-width: 380px;
+    width: 100%;
+    padding: 2.2rem 1.9rem;
+    text-align: center;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .quiz-progress {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.3rem;
+  }
+  .quiz-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--peach);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .quiz-dot.active {
+    background: var(--pink);
+    transform: scale(1.3);
+  }
+  .quiz-dot.done {
+    background: var(--mint);
+  }
+  .quiz-question {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 1.3rem;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+  }
+  .quiz-option {
+    font-family: 'Kanit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
+    border: 3px solid var(--ink);
+    border-radius: 14px;
+    background: white;
+    color: var(--ink);
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .quiz-option:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+  .quiz-option.correct {
+    background: var(--mint);
+  }
+  .quiz-option.wrong {
+    background: #ffb1b1;
+  }
+  .quiz-option.disabled {
+    pointer-events: none;
+  }
+  .quiz-feedback {
+    font-family: 'Mali', cursive;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--pink-dark);
+    min-height: 1.6rem;
+    margin-bottom: 0.5rem;
+  }
+
   /* Voucher popup */
   .modal-overlay {
     display: none;
@@ -825,7 +905,7 @@
     <div class="section">
       <h2>ของขวัญพิเศษเล็กๆ น้อยๆ สำหรับคุณ 🎁</h2>
       <p class="subtitle">คลิกบนของขวัญ...</p>
-      <button class="gift-btn" onclick="openVoucher()" aria-label="เปิดของขวัญ">
+      <button class="gift-btn" onclick="openQuiz()" aria-label="เปิดของขวัญ">
         <img src="images/gift.png" alt="ของขวัญ">
       </button>
     </div>
@@ -849,6 +929,21 @@
 
   <div id="lightbox" onclick="closeLightbox()">
     <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <div id="quizModal" class="modal-overlay" onclick="if (event.target === this) closeQuiz();">
+    <div class="quiz-card">
+      <button class="voucher-close" onclick="closeQuiz()" aria-label="ปิด">✕</button>
+      <div class="quiz-progress">
+        <span class="quiz-dot"></span>
+        <span class="quiz-dot"></span>
+        <span class="quiz-dot"></span>
+      </div>
+      <div id="quizQuestion" class="quiz-question"></div>
+      <div id="quizOptions" class="quiz-options"></div>
+      <p id="quizFeedback" class="quiz-feedback"></p>
+      <button id="quizNextBtn" class="btn" onclick="quizNext()" style="display:none;">ต่อไป ➡️</button>
+    </div>
   </div>
 
   <div id="voucherModal" class="modal-overlay" onclick="if (event.target === this) closeVoucher();">
@@ -1008,6 +1103,93 @@
     function closeLightbox() {
       lightbox.classList.remove("open");
       setTimeout(() => { lightboxImg.src = ""; }, 250);
+    }
+
+    // Platzhalter-Fragen: bitte durch echte Fragen/Antworten ersetzen (correct = Index der richtigen Antwort, ab 0 gezählt)
+    const QUIZ_QUESTIONS = [
+      {
+        question: "[คำถามที่ 1 — แก้ไขตรงนี้]",
+        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
+        correct: 0
+      },
+      {
+        question: "[คำถามที่ 2 — แก้ไขตรงนี้]",
+        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
+        correct: 0
+      },
+      {
+        question: "[คำถามที่ 3 — แก้ไขตรงนี้]",
+        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
+        correct: 0
+      }
+    ];
+
+    const quizModal = document.getElementById("quizModal");
+    const quizQuestionEl = document.getElementById("quizQuestion");
+    const quizOptionsEl = document.getElementById("quizOptions");
+    const quizFeedbackEl = document.getElementById("quizFeedback");
+    const quizNextBtn = document.getElementById("quizNextBtn");
+    const quizDots = document.querySelectorAll(".quiz-dot");
+
+    let quizIndex = 0;
+    let quizAnswered = false;
+
+    function openQuiz() {
+      quizIndex = 0;
+      quizModal.style.display = "flex";
+      renderQuizQuestion();
+    }
+
+    function closeQuiz() {
+      quizModal.style.display = "none";
+    }
+
+    function renderQuizQuestion() {
+      const q = QUIZ_QUESTIONS[quizIndex];
+      quizAnswered = false;
+      quizFeedbackEl.textContent = "";
+      quizNextBtn.style.display = "none";
+      quizQuestionEl.textContent = `${quizIndex + 1}. ${q.question}`;
+      quizOptionsEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-option";
+        btn.textContent = opt;
+        btn.onclick = () => selectQuizAnswer(i, btn);
+        quizOptionsEl.appendChild(btn);
+      });
+      quizDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === quizIndex);
+        dot.classList.toggle("done", i < quizIndex);
+      });
+    }
+
+    function selectQuizAnswer(i, btn) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const q = QUIZ_QUESTIONS[quizIndex];
+      const allBtns = quizOptionsEl.querySelectorAll(".quiz-option");
+      allBtns.forEach((b) => b.classList.add("disabled"));
+      if (i === q.correct) {
+        btn.classList.add("correct");
+        quizFeedbackEl.textContent = "ถูกต้อง! 🎉";
+      } else {
+        btn.classList.add("wrong");
+        allBtns[q.correct].classList.add("correct");
+        quizFeedbackEl.textContent = "ไม่ถูกนะ 😅";
+      }
+      quizNextBtn.style.display = "inline-block";
+      quizNextBtn.textContent = quizIndex < QUIZ_QUESTIONS.length - 1 ? "ต่อไป ➡️" : "เปิดของขวัญ 🎁";
+    }
+
+    function quizNext() {
+      quizIndex++;
+      if (quizIndex < QUIZ_QUESTIONS.length) {
+        renderQuizQuestion();
+      } else {
+        closeQuiz();
+        openVoucher();
+      }
     }
 
     const voucherModal = document.getElementById("voucherModal");
