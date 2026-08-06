@@ -492,8 +492,35 @@
     font-size: 1rem;
     line-height: 1.6;
     color: var(--ink-soft);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     white-space: pre-line;
+  }
+  .voucher-gift {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+    background: white;
+    border: 2px dashed var(--peach);
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.9rem;
+  }
+  .voucher-gift-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+  .voucher-gift-title {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--pink-dark);
+    margin-bottom: 0.2rem;
+  }
+  .voucher-gift-desc {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
   }
   .voucher-divider {
     border-top: 2px dashed var(--peach);
@@ -829,8 +856,25 @@
       <div class="voucher-stamp">💯</div>
       <button class="voucher-close" onclick="closeVoucher()" aria-label="ปิด">✕</button>
       <div class="voucher-ribbon">🎁 Voucher</div>
-      <h3 class="voucher-title">ของขวัญพิเศษสำหรับแฟนสาวสุดที่รักของฉัน</h3>
-      <p class="voucher-desc">ของขวัญพิเศษสำหรับที่รักของฉัน</p>
+      <h3 class="voucher-title">ของขวัญวันเกิดจากใจฉัน 💝</h3>
+      <p class="voucher-desc">สองเซอร์ไพรส์เล็กๆ (แต่ใจใหญ่) สำหรับคุณ:</p>
+
+      <div class="voucher-gift">
+        <span class="voucher-gift-icon">🧖‍♀️❄️</span>
+        <div>
+          <div class="voucher-gift-title">สุดสัปดาห์สปาที่ป่าดำ (Schwarzwald)</div>
+          <div class="voucher-gift-desc">พักผ่อนสุดหรูท่ามกลางหิมะฤดูหนาว แค่เราสองคน ไม่มีใครกวนใจ 🏔️♨️</div>
+        </div>
+      </div>
+
+      <div class="voucher-gift">
+        <span class="voucher-gift-icon">🎉🏨</span>
+        <div>
+          <div class="voucher-gift-title">ปาร์ตี้วันเกิดกับเพื่อนๆ</div>
+          <div class="voucher-gift-desc">ฉันขอเลี้ยงค่าโรงแรม 1 คืน ไปสนุกให้เต็มที่กับเพื่อนสาวๆ เลยนะ 🥂</div>
+        </div>
+      </div>
+
       <div class="voucher-divider"></div>
       <div class="voucher-footer">
         <div>
