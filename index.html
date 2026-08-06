@@ -1108,19 +1108,19 @@
     // Platzhalter-Fragen: bitte durch echte Fragen/Antworten ersetzen (correct = Index der richtigen Antwort, ab 0 gezählt)
     const QUIZ_QUESTIONS = [
       {
-        question: "[คำถามที่ 1 — แก้ไขตรงนี้]",
-        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
-        correct: 0
+        question: "[คำถามที่ 1 — ฉันรักทีรักของฉันมากแค่ไหน?]",
+        options: ["[นิดหน่อย]", "[มากที่สุดในโลก!]", "[มาก]"],
+        correct: 1
       },
       {
-        question: "[คำถามที่ 2 — แก้ไขตรงนี้]",
-        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
-        correct: 0
+        question: "[คำถามที่ 2 — สิ่งที่สวยงามที่สุดในอิตาลี?]",
+        options: ["[PICKPOCKEEEEET]", "[44€ ปลา]", "[เวนิส]"],
+        correct: 2
       },
       {
-        question: "[คำถามที่ 3 — แก้ไขตรงนี้]",
-        options: ["[ตัวเลือก A]", "[ตัวเลือก B]", "[ตัวเลือก C]"],
-        correct: 0
+        question: "[คำถามที่ 3 — เราจะได้เห็นหิมะในฤดูหนาวไหม?]",
+        options: ["[เลขที่]", "[ฉันไม่สนใจ]", "[แน่นอน! ถ้าไม่เป็นอย่างนั้น ฉันจะบ้าตาย!]"],
+        correct: 2
       }
     ];
 
@@ -1166,20 +1166,19 @@
 
     function selectQuizAnswer(i, btn) {
       if (quizAnswered) return;
-      quizAnswered = true;
       const q = QUIZ_QUESTIONS[quizIndex];
-      const allBtns = quizOptionsEl.querySelectorAll(".quiz-option");
-      allBtns.forEach((b) => b.classList.add("disabled"));
       if (i === q.correct) {
+        quizAnswered = true;
+        const allBtns = quizOptionsEl.querySelectorAll(".quiz-option");
+        allBtns.forEach((b) => b.classList.add("disabled"));
         btn.classList.add("correct");
         quizFeedbackEl.textContent = "ถูกต้อง! 🎉";
+        quizNextBtn.style.display = "inline-block";
+        quizNextBtn.textContent = quizIndex < QUIZ_QUESTIONS.length - 1 ? "ต่อไป ➡️" : "เปิดของขวัญ 🎁";
       } else {
-        btn.classList.add("wrong");
-        allBtns[q.correct].classList.add("correct");
-        quizFeedbackEl.textContent = "ไม่ถูกนะ 😅";
+        btn.classList.add("wrong", "disabled");
+        quizFeedbackEl.textContent = "ไม่ถูกนะ ลองอีกครั้ง 😅";
       }
-      quizNextBtn.style.display = "inline-block";
-      quizNextBtn.textContent = quizIndex < QUIZ_QUESTIONS.length - 1 ? "ต่อไป ➡️" : "เปิดของขวัญ 🎁";
     }
 
     function quizNext() {
